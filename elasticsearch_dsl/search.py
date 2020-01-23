@@ -687,18 +687,16 @@ class Search(Request):
         :arg ignore_cache: if set to ``True``, consecutive calls will hit
             ES, while cached result will be ignored. Defaults to `False`
         """
-        if ignore_cache or not hasattr(self, '_response'):
-            es = get_connection(self._using)
+        es = get_connection(self._using)
 
-            self._response = self._response_class(
-                self,
-                es.search(
-                    index=self._index,
-                    body=self.to_dict(),
-                    **self._params
-                )
+        return self._response_class(
+            self,
+            es.search(
+                index=self._index,
+                body=self.to_dict(),
+                **self._params
             )
-        return self._response
+        )
 
     def scan(self):
         """
